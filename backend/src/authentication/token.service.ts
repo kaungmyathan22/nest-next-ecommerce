@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcryptjs';
+import { Cache } from 'cache-manager';
 import { Model, Types } from 'mongoose';
 import { EnvironmentConstants } from 'src/common/constants/environment.constants';
 import { UserDocument } from 'src/users/schemas/user.schema';
@@ -15,6 +17,7 @@ export class TokenService {
     private readonly configService: ConfigService,
     @InjectModel(RefreshToken.name)
     private readonly refreshTokenModel: Model<RefreshToken>,
+    @Inject(CACHE_MANAGER) private cacheService: Cache,
   ) {}
 
   async getRefreshToken(user: UserDocument) {
@@ -46,11 +49,12 @@ export class TokenService {
       },
       { upsert: true },
     );
-
     return refresh_token;
   }
   async getAccessToken(user: UserDocument) {
     const token = this.jwtService.sign({ email: user.email });
+    const tokens = (await this.cacheService.get(`tokens:${user.email}`)) || [];
+    console.log({ tokens });
     return token;
   }
 

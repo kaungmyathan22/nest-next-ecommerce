@@ -8,6 +8,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcryptjs';
 import { Model } from 'mongoose';
 import { EnvironmentConstants } from 'src/common/constants/environment.constants';
+import { PaginatedParamsDto } from 'src/common/dto/paginated-query.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './schemas/user.schema';
@@ -35,8 +36,25 @@ export class UsersService {
     }
   }
 
-  findAll() {
-    return this.UserModel.find();
+  async findAll(queryParams: PaginatedParamsDto) {
+    const { page = 1, pageSize = 10 } = queryParams as PaginatedParamsDto;
+
+    const totalItems = await this.UserModel.countDocuments();
+
+    const totalPages = Math.ceil(totalItems / pageSize);
+
+    const skip = (page - 1) * pageSize;
+
+    const users = await this.UserModel.find().limit(pageSize).skip(skip);
+    return {
+      prevPage: page > 1 ? page - 1 : null,
+      nextPage: page > totalPages ? null : +page + 1,
+      totalPages: +totalPages,
+      totalItems: +totalItems,
+      page: +page,
+      pageSize: +pageSize,
+      data: users,
+    };
   }
 
   findByEmail(email: string) {

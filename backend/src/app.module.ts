@@ -1,5 +1,7 @@
+import { CacheModule } from '@nestjs/cache-manager';
 import { MiddlewareConsumer, Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import * as redisStore from 'cache-manager-redis-store';
 import * as joi from 'joi';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -28,6 +30,19 @@ import { UsersModule } from './users/users.module';
         COOKIE_REFRESH_TOKEN_KEY: joi.string().required(),
       }),
     }),
+    CacheModule.registerAsync({
+      isGlobal: true,
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        return {
+          store: redisStore,
+          host: configService.get('REDIS_HOST'),
+          port: configService.get('REDIS_PORT'),
+        };
+      },
+    }),
+
     UsersModule,
     AuthenticationModule,
     DatabaseModule,

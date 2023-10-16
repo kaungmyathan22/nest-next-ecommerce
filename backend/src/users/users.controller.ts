@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ObjectIdValidationPipe } from 'src/common/pipes/object-id-validation.pipe';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -22,8 +23,8 @@ export class UsersController {
   }
 
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  findAll(@Query() queryParams) {
+    return this.usersService.findAll(queryParams);
   }
 
   @Get(':id')
