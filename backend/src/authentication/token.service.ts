@@ -51,6 +51,7 @@ export class TokenService {
     );
     return refresh_token;
   }
+
   async getAccessToken(user: UserDocument) {
     const token = this.jwtService.sign({ email: user.email });
     const tokens = (await this.cacheService.get(`tokens:${user.email}`)) || [];

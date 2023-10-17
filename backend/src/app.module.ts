@@ -9,6 +9,7 @@ import { AuthenticationModule } from './authentication/authentication.module';
 import { CookieMiddleware } from './common/middlewares/cookie.middleware';
 import { DatabaseModule } from './database/database.module';
 import { UsersModule } from './users/users.module';
+import { EmailModule } from './email/email.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -28,6 +29,10 @@ import { UsersModule } from './users/users.module';
         /* cookies */
         COOKIE_JWT_ACCESS_TOKEN_KEY: joi.string().required(),
         COOKIE_REFRESH_TOKEN_KEY: joi.string().required(),
+        /* password reset */
+        PASSWORD_RESET_TOKEN_SECRET: joi.string().required(),
+        PASSWORD_RESET_TOKEN_EXPIRES_IN: joi.number().required(),
+        FRONTNED_URL: joi.string().required(),
       }),
     }),
     CacheModule.registerAsync({
@@ -46,6 +51,7 @@ import { UsersModule } from './users/users.module';
     UsersModule,
     AuthenticationModule,
     DatabaseModule,
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [AppService],

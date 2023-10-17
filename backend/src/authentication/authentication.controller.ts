@@ -16,7 +16,9 @@ import { UserDocument } from 'src/users/schemas/user.schema';
 import { AuthenticationService } from './authentication.service';
 import { CookieService } from './cookie.service';
 import { ChangePasswordDTO } from './dto/change-password.dto';
+import { ForgotPasswordDTO } from './dto/forgot-password.dto';
 import { RegisterDto } from './dto/register.dto';
+import { ResetPasswordDTO } from './dto/reset-password.dto';
 import JwtRefreshAuthenticationGuard from './guards/jwt-refresh.guard';
 import JwtAuthenticationGuard from './guards/jwt.guard';
 import { LocalAuthGuard } from './guards/local.guard';
@@ -99,5 +101,17 @@ export class AuthenticationController {
       this.cookieService.getCookieWithJwtToken(access_token);
     req.res.setHeader('Set-Cookie', accessTokenCookie);
     return { access_token };
+  }
+
+  @Post('forgot-password')
+  @HttpCode(HttpStatus.OK)
+  async forgotPassword(@Body() payload: ForgotPasswordDTO) {
+    return this.authenticationService.forgotPassword(payload);
+  }
+
+  @Post('reset-password')
+  @HttpCode(HttpStatus.OK)
+  async resetPassword(@Body() payload: ResetPasswordDTO) {
+    return this.authenticationService.resetPassword(payload);
   }
 }
