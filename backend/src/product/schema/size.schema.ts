@@ -1,7 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
 import { SchemaUtils } from 'src/utils/schema';
 
-@Schema()
+@Schema({ collection: 'size' })
 export class Size extends Document {
   @Prop()
   name: string;
