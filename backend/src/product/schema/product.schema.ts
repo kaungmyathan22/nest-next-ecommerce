@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
+import { AbstractDocument } from 'src/database/abstract.document';
 import { SchemaUtils } from 'src/utils/schema';
 import { Category } from './category.schema';
 import { Colour, ColourSchema } from './colour.schema';
@@ -10,7 +11,7 @@ import { Size, SizeSchema } from './size.schema';
   versionKey: false,
   id: true,
 })
-export class Product extends Document {
+export class Product extends AbstractDocument {
   @Prop()
   title: string;
   @Prop()
