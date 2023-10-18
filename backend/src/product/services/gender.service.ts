@@ -53,6 +53,7 @@ export class GenderService {
       throw error;
     }
   }
+
   async updateGender(id: string, payload: CreateGenderDTO) {
     try {
       const result = await this.GenderModel.findOneAndUpdate(
@@ -75,5 +76,9 @@ export class GenderService {
       }
       throw error;
     }
+  }
+
+  async getGenderById(id: string) {
+    return this.GenderModel.findOne({ _id: id });
   }
 }
