@@ -1,14 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { AbstractDocument } from 'src/database/abstract.document';
+import { Document } from 'mongoose';
 import { SchemaUtils } from 'src/utils/schema';
 
-@Schema()
-export class Gender extends AbstractDocument {
-  @Prop()
+@Schema({ versionKey: false, collection: 'gender' })
+export class GenderDocument extends Document {
+  @Prop({ unique: true })
   name: string;
 }
 
-export const GenderSchema = SchemaFactory.createForClass(Gender);
+export const GenderSchema = SchemaFactory.createForClass(GenderDocument);
 
 GenderSchema.set('toJSON', {
   virtuals: true,
