@@ -10,6 +10,7 @@ import { CookieMiddleware } from './common/middlewares/cookie.middleware';
 import { DatabaseModule } from './database/database.module';
 import { UsersModule } from './users/users.module';
 import { EmailModule } from './email/email.module';
+import { ProductModule } from './product/product.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -52,6 +53,7 @@ import { EmailModule } from './email/email.module';
     AuthenticationModule,
     DatabaseModule,
     EmailModule,
+    ProductModule,
   ],
   controllers: [AppController],
   providers: [AppService],
