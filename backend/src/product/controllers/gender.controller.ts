@@ -8,7 +8,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { ObjectIdValidationPipe } from 'src/common/pipes/object-id-validation.pipe';
-import { QueryParamsValidationPipe } from 'src/common/pipes/query-params-validation.pipe';
+import { PaginationQueryParamsValidationPipe } from 'src/common/pipes/pagination-query-params-validation.pipe';
 import { CreateGenderDTO } from '../dto/gender/create-gender.dto';
 import { GenderService } from '../services/gender.service';
 
@@ -29,7 +29,7 @@ export class GenderController {
   }
 
   @Get()
-  getGenders(@Query(QueryParamsValidationPipe) queryParams) {
+  getGenders(@Query(PaginationQueryParamsValidationPipe) queryParams) {
     return this.genderService.getGenders(queryParams);
   }
 }

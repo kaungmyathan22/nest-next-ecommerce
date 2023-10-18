@@ -8,7 +8,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { ObjectIdValidationPipe } from 'src/common/pipes/object-id-validation.pipe';
-import { QueryParamsValidationPipe } from 'src/common/pipes/query-params-validation.pipe';
+import { PaginationQueryParamsValidationPipe } from 'src/common/pipes/pagination-query-params-validation.pipe';
 import { CreateCategoryDTO } from '../dto/category/create-category.dto';
 import { UpdateCategoryDTO } from '../dto/category/update-category.dto';
 import { CategoryService } from '../services/category.service';
@@ -23,7 +23,7 @@ export class CategoryController {
 
   @Get(':id')
   getCategories(
-    @Query(QueryParamsValidationPipe) query,
+    @Query(PaginationQueryParamsValidationPipe) query,
     @Param('id', ObjectIdValidationPipe) id: string,
   ) {
     return this.categoryService.getCategoryByGender(id, query);

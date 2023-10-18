@@ -1,7 +1,7 @@
 import {
-    ConflictException,
-    Injectable,
-    NotFoundException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
@@ -89,5 +89,9 @@ export class CategoryService {
       }
       throw error;
     }
+  }
+
+  async getCategoryById(id: string) {
+    return this.CategoryModel.findOne({ _id: id });
   }
 }

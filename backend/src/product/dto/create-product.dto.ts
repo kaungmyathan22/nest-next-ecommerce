@@ -30,7 +30,7 @@ export class CreateProductDto {
   @ValidateNested({ each: true })
   @Type(() => SizeDTO)
   sizes: SizeDTO[];
-  @IsArray()
+  @IsArray({})
   @ValidateNested({ each: true })
   @Type(() => ColourDTO)
   colours: ColourDTO[];

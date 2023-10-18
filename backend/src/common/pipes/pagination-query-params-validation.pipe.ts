@@ -1,12 +1,12 @@
 import {
-    ArgumentMetadata,
-    BadRequestException,
-    Injectable,
-    PipeTransform,
+  ArgumentMetadata,
+  BadRequestException,
+  Injectable,
+  PipeTransform,
 } from '@nestjs/common';
 
 @Injectable()
-export class QueryParamsValidationPipe implements PipeTransform<any> {
+export class PaginationQueryParamsValidationPipe implements PipeTransform<any> {
   transform(value: any, metadata: ArgumentMetadata): any {
     if (value.page && isNaN(value.page)) {
       throw new BadRequestException('Invalid page value. Must be a number.');
