@@ -1,7 +1,7 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import * as bcrypt from 'bcryptjs';
-import { Exclude } from 'class-transformer';
-import { Document, HydratedDocument } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import * as bcrypt from "bcryptjs";
+import { Exclude } from "class-transformer";
+import { Document, HydratedDocument } from "mongoose";
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -27,7 +27,7 @@ export class User extends Document {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
-UserSchema.set('toJSON', {
+UserSchema.set("toJSON", {
   virtuals: true,
   transform: (doc, ret, opt) => {
     delete ret.password;
@@ -36,7 +36,7 @@ UserSchema.set('toJSON', {
     return ret;
   },
 });
-UserSchema.pre('save', async function () {
+UserSchema.pre("save", async function () {
   if (this.isModified(this.password) || this.isNew) {
     this.password = await bcrypt.hash(this.password, 10);
   }

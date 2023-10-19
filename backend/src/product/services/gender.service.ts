@@ -1,22 +1,22 @@
 import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { EnvironmentConstants } from 'src/common/constants/environment.constants';
-import { PaginatedParamsDto } from 'src/common/dto/paginated-query.dto';
-import { CreateGenderDTO } from '../dto/gender/create-gender.dto';
-import { GenderDocument } from '../schema/gender.schema';
+    ConflictException,
+    Injectable,
+    NotFoundException,
+} from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
+import { EnvironmentConstants } from "src/common/constants/environment.constants";
+import { PaginatedParamsDto } from "src/common/dto/paginated-query.dto";
+import { CreateGenderDTO } from "../dto/gender/create-gender.dto";
+import { GenderDocument } from "../schema/gender.schema";
 
 @Injectable()
 export class GenderService {
   constructor(
     @InjectModel(GenderDocument.name)
     private GenderModel: Model<GenderDocument>,
-    private readonly configService: ConfigService,
+    private readonly configService: ConfigService
   ) {}
 
   async getGenders(queryParams: PaginatedParamsDto) {
@@ -27,7 +27,7 @@ export class GenderService {
     const data = await this.GenderModel.find().limit(pageSize).skip(skip);
     return {
       prevPage: page > 1 ? page - 1 : null,
-      nextPage: page > totalPages ? null : +page + 1,
+      nextPage: page >= totalPages ? null : +page + 1,
       totalPages,
       totalItems,
       page,
@@ -47,7 +47,7 @@ export class GenderService {
         +this.configService.get(EnvironmentConstants.DUPLICATE_ERROR_KEY)
       ) {
         throw new ConflictException(
-          `Gender with name (${payload.name}) already exists.`,
+          `Gender with name (${payload.name}) already exists.`
         );
       }
       throw error;
@@ -59,7 +59,7 @@ export class GenderService {
       const result = await this.GenderModel.findOneAndUpdate(
         { _id: id },
         { name: payload.name },
-        { new: true },
+        { new: true }
       );
       if (!result) {
         throw new NotFoundException(`Gender not found with given id ${id}.`);
@@ -71,7 +71,7 @@ export class GenderService {
         +this.configService.get(EnvironmentConstants.DUPLICATE_ERROR_KEY)
       ) {
         throw new ConflictException(
-          `Gender with name (${payload.name}) already exists.`,
+          `Gender with name (${payload.name}) already exists.`
         );
       }
       throw error;

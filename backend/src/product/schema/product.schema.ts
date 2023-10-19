@@ -1,9 +1,9 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
-import { SchemaUtils } from 'src/utils/schema';
-import { Category } from './category.schema';
-import { Colour, ColourSchema } from './colour.schema';
-import { Size, SizeSchema } from './size.schema';
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Document, Types } from "mongoose";
+import { SchemaUtils } from "src/utils/schema";
+import { Category } from "./category.schema";
+import { Colour, ColourSchema } from "./colour.schema";
+import { Size, SizeSchema } from "./size.schema";
 
 @Schema({
   virtuals: true,
@@ -19,7 +19,7 @@ export class Product extends Document {
   sizes: Size[];
   @Prop({ type: [ColourSchema] })
   colours: Colour[];
-  @Prop({ type: Types.ObjectId, ref: 'category' })
+  @Prop({ type: Types.ObjectId, ref: "category" })
   category: Category;
   @Prop()
   price: number;
@@ -27,7 +27,7 @@ export class Product extends Document {
 
 export const ProductSchema = SchemaFactory.createForClass(Product);
 
-ProductSchema.set('toJSON', {
+ProductSchema.set("toJSON", {
   virtuals: true,
   transform: SchemaUtils.transform,
 });

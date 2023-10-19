@@ -1,20 +1,20 @@
-import { Type } from 'class-transformer';
+import { Type } from "class-transformer";
 import {
   IsArray,
   IsMongoId,
   IsNumber,
   IsString,
   ValidateNested,
-} from 'class-validator';
+} from "class-validator";
 
-class SizeDTO {
+export class SizeDTO {
   @IsString()
   name: string;
   @IsNumber()
   price: number;
 }
 
-class ColourDTO {
+export class ColourDTO {
   @IsString()
   color_hex: string;
   @IsNumber()

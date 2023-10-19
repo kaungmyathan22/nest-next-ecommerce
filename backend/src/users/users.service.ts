@@ -2,21 +2,21 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
-} from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { InjectModel } from '@nestjs/mongoose';
-import * as bcrypt from 'bcryptjs';
-import { Model } from 'mongoose';
-import { EnvironmentConstants } from 'src/common/constants/environment.constants';
-import { PaginatedParamsDto } from 'src/common/dto/paginated-query.dto';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './schemas/user.schema';
+} from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { InjectModel } from "@nestjs/mongoose";
+import * as bcrypt from "bcryptjs";
+import { Model } from "mongoose";
+import { EnvironmentConstants } from "src/common/constants/environment.constants";
+import { PaginatedParamsDto } from "src/common/dto/paginated-query.dto";
+import { CreateUserDto } from "./dto/create-user.dto";
+import { UpdateUserDto } from "./dto/update-user.dto";
+import { User } from "./schemas/user.schema";
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User.name) private UserModel: Model<User>,
-    private readonly configService: ConfigService,
+    private readonly configService: ConfigService
   ) {}
   async create(payload: CreateUserDto) {
     try {
@@ -29,7 +29,7 @@ export class UsersService {
         +this.configService.get(EnvironmentConstants.DUPLICATE_ERROR_KEY)
       ) {
         throw new ConflictException(
-          `User with email(${payload.email}) already exists.`,
+          `User with email(${payload.email}) already exists.`
         );
       }
       throw error;
@@ -48,7 +48,7 @@ export class UsersService {
     const users = await this.UserModel.find().limit(pageSize).skip(skip);
     return {
       prevPage: page > 1 ? page - 1 : null,
-      nextPage: page > totalPages ? null : +page + 1,
+      nextPage: page >= totalPages ? null : +page + 1,
       totalPages: +totalPages,
       totalItems: +totalItems,
       page: +page,
@@ -80,7 +80,7 @@ export class UsersService {
       updateUserDto,
       {
         new: true,
-      },
+      }
     );
     return updatedUser;
   }
@@ -89,7 +89,7 @@ export class UsersService {
     const hashedPassword = await bcrypt.hash(password, 10);
     const updatedUser = await this.UserModel.findOneAndUpdate(
       { _id: id },
-      { password: hashedPassword },
+      { password: hashedPassword }
     );
     return updatedUser;
   }

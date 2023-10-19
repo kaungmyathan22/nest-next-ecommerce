@@ -1,26 +1,26 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { PaginatedParamsDto } from 'src/common/dto/paginated-query.dto';
-import { CreateProductDto } from '../dto/create-product.dto';
-import { UpdateProductDto } from '../dto/update-product.dto';
-import { Product } from '../schema/product.schema';
-import { CategoryService } from './category.service';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
+import { PaginatedParamsDto } from "src/common/dto/paginated-query.dto";
+import { CreateProductDto } from "../dto/create-product.dto";
+import { UpdateProductDto } from "../dto/update-product.dto";
+import { Product } from "../schema/product.schema";
+import { CategoryService } from "./category.service";
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectModel(Product.name)
     private ProductModel: Model<Product>,
-    private readonly categoryService: CategoryService,
+    private readonly categoryService: CategoryService
   ) {}
   async create(payload: CreateProductDto) {
     const category = await this.categoryService.getCategoryById(
-      payload.category,
+      payload.category
     );
     if (!category) {
       throw new NotFoundException(
-        'Category with given id not found in the database.',
+        "Category with given id not found in the database."
       );
     }
     const product = new this.ProductModel({
@@ -41,7 +41,7 @@ export class ProductService {
     const totalPages = Math.ceil(totalItems / pageSize);
     return {
       prevPage: page > 1 ? page - 1 : null,
-      nextPage: page > totalPages ? null : +page + 1,
+      nextPage: page >= totalPages ? null : +page + 1,
       totalPages,
       totalItems,
       page,
@@ -53,7 +53,7 @@ export class ProductService {
   async findOne(id: string) {
     const product = await this.ProductModel.findOne({ _id: id });
     if (!product) {
-      throw new NotFoundException('Product with given id not found.');
+      throw new NotFoundException("Product with given id not found.");
     }
     return product;
   }
@@ -62,7 +62,7 @@ export class ProductService {
     const product = await this.ProductModel.findOneAndUpdate(
       { _id: id },
       payload,
-      { new: true },
+      { new: true }
     );
     return product;
   }

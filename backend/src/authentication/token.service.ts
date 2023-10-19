@@ -1,14 +1,14 @@
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Inject, Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
-import { InjectModel } from '@nestjs/mongoose';
-import * as bcrypt from 'bcryptjs';
-import { Cache } from 'cache-manager';
-import { Model, Types } from 'mongoose';
-import { EnvironmentConstants } from 'src/common/constants/environment.constants';
-import { UserDocument } from 'src/users/schemas/user.schema';
-import { RefreshToken } from './schemas/refresh-token.schema';
+import { CACHE_MANAGER } from "@nestjs/cache-manager";
+import { Inject, Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { JwtService } from "@nestjs/jwt";
+import { InjectModel } from "@nestjs/mongoose";
+import * as bcrypt from "bcryptjs";
+import { Cache } from "cache-manager";
+import { Model, Types } from "mongoose";
+import { EnvironmentConstants } from "src/common/constants/environment.constants";
+import { UserDocument } from "src/users/schemas/user.schema";
+import { RefreshToken } from "./schemas/refresh-token.schema";
 
 @Injectable()
 export class TokenService {
@@ -17,7 +17,7 @@ export class TokenService {
     private readonly configService: ConfigService,
     @InjectModel(RefreshToken.name)
     private readonly refreshTokenModel: Model<RefreshToken>,
-    @Inject(CACHE_MANAGER) private cacheService: Cache,
+    @Inject(CACHE_MANAGER) private cacheService: Cache
   ) {}
 
   async getRefreshToken(user: UserDocument) {
@@ -25,19 +25,19 @@ export class TokenService {
       { id: user.id },
       {
         secret: this.configService.get(
-          EnvironmentConstants.JWT_REFRESH_TOKEN_SECRET,
+          EnvironmentConstants.JWT_REFRESH_TOKEN_SECRET
         ),
         expiresIn: this.configService.get(
-          EnvironmentConstants.JWT_REFRESH_TOKEN_EXPIRES_IN,
+          EnvironmentConstants.JWT_REFRESH_TOKEN_EXPIRES_IN
         ),
-      },
+      }
     );
     const expirationTime = new Date();
     const tokenExpirationTimeInSecodns = +this.configService.get(
-      EnvironmentConstants.JWT_REFRESH_TOKEN_EXPIRES_IN,
+      EnvironmentConstants.JWT_REFRESH_TOKEN_EXPIRES_IN
     );
     expirationTime.setSeconds(
-      expirationTime.getSeconds() + tokenExpirationTimeInSecodns,
+      expirationTime.getSeconds() + tokenExpirationTimeInSecodns
     );
 
     const refreshTokenHash = await bcrypt.hash(refresh_token, 10);
@@ -47,7 +47,7 @@ export class TokenService {
         expirationTime,
         refreshToken: refreshTokenHash,
       },
-      { upsert: true },
+      { upsert: true }
     );
     return refresh_token;
   }
@@ -55,7 +55,6 @@ export class TokenService {
   async getAccessToken(user: UserDocument) {
     const token = this.jwtService.sign({ email: user.email });
     const tokens = (await this.cacheService.get(`tokens:${user.email}`)) || [];
-    console.log({ tokens });
     return token;
   }
 
