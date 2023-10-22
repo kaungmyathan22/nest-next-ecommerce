@@ -1,17 +1,17 @@
-import { CacheModule } from '@nestjs/cache-manager';
-import { MiddlewareConsumer, Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import * as redisStore from 'cache-manager-redis-store';
-import * as joi from 'joi';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { AuthenticationModule } from './authentication/authentication.module';
-import { CookieMiddleware } from './common/middlewares/cookie.middleware';
-import { DatabaseModule } from './database/database.module';
-import { UsersModule } from './users/users.module';
-import { EmailModule } from './email/email.module';
-import { ProductModule } from './product/product.module';
-import { OrderModule } from './order/order.module';
+import { CacheModule } from "@nestjs/cache-manager";
+import { MiddlewareConsumer, Module } from "@nestjs/common";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+import * as redisStore from "cache-manager-redis-store";
+import * as joi from "joi";
+import { AppController } from "./app.controller";
+import { AppService } from "./app.service";
+import { AuthenticationModule } from "./authentication/authentication.module";
+import { CookieMiddleware } from "./common/middlewares/cookie.middleware";
+import { DatabaseModule } from "./database/database.module";
+import { EmailModule } from "./email/email.module";
+import { OrderModule } from "./order/order.module";
+import { ProductModule } from "./product/product.module";
+import { UsersModule } from "./users/users.module";
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -44,8 +44,8 @@ import { OrderModule } from './order/order.module';
       useFactory: (configService: ConfigService) => {
         return {
           store: redisStore,
-          host: configService.get('REDIS_HOST'),
-          port: configService.get('REDIS_PORT'),
+          host: configService.get("REDIS_HOST"),
+          port: configService.get("REDIS_PORT"),
         };
       },
     }),
@@ -62,6 +62,6 @@ import { OrderModule } from './order/order.module';
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(CookieMiddleware).forRoutes('*');
+    consumer.apply(CookieMiddleware).forRoutes("*");
   }
 }
