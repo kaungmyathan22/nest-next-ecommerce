@@ -1,21 +1,21 @@
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { PassportStrategy } from '@nestjs/passport';
-import { Request } from 'express';
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import { EnvironmentConstants } from 'src/common/constants/environment.constants';
-import { UsersService } from 'src/users/users.service';
-import { TokenService } from '../token.service';
+import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { PassportStrategy } from "@nestjs/passport";
+import { Request } from "express";
+import { ExtractJwt, Strategy } from "passport-jwt";
+import { EnvironmentConstants } from "src/common/constants/environment.constants";
+import { UsersService } from "src/users/services/users.service";
+import { TokenService } from "../token.service";
 
 @Injectable()
 export class JwtRefreshTokenStrategy extends PassportStrategy(
   Strategy,
-  'jwt-refresh-token',
+  "jwt-refresh-token"
 ) {
   constructor(
     private readonly configService: ConfigService,
     private readonly refreshTokenService: TokenService,
-    private readonly userService: UsersService,
+    private readonly userService: UsersService
   ) {
     super({
       jwtFromRequest: (req: Request) => {
@@ -31,7 +31,7 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(
         return headerRefreshToken || cookieRefreshToken;
       },
       secretOrKey: configService.get(
-        EnvironmentConstants.JWT_REFRESH_TOKEN_SECRET,
+        EnvironmentConstants.JWT_REFRESH_TOKEN_SECRET
       ),
       passReqToCallback: true,
     });
@@ -41,7 +41,7 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(
     const refreshToken = request.cookies?.Refresh;
     const isTokenValid = await this.refreshTokenService.isRefreshTokenValid(
       payload.id,
-      refreshToken,
+      refreshToken
     );
     if (isTokenValid) {
       return await this.userService.findOne(payload.id);
