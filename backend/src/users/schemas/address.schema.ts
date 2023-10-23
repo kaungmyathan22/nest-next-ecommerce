@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { HydratedDocument, Types } from "mongoose";
-import { Order } from "src/order/schemas/order.schema";
+import { Document, HydratedDocument, Types } from "mongoose";
 import { SchemaUtils } from "src/utils/schema";
 import { User } from "./user.schema";
 
@@ -10,35 +9,38 @@ export type AddressDocument = HydratedDocument<Address>;
   virtuals: true,
   versionKey: false,
   id: true,
+  validateBeforeSave: true,
 })
 export class Address extends Document {
   @Prop({ type: Types.ObjectId, ref: "user" })
   user: User;
-  @Prop()
+  @Prop({ required: true, unique: true })
+  name: string;
+  @Prop({ required: true })
   firstName: string;
-  @Prop()
+  @Prop({ required: true })
   lastName: string;
-  @Prop()
+  @Prop({ required: true })
   country_region: string;
-  @Prop()
+  @Prop({ required: true })
   companyName: string;
-  @Prop()
+  @Prop({ required: true })
   streetAddress: string;
-  @Prop()
+  @Prop({ required: true })
   apartment_suite_unit: string;
-  @Prop()
+  @Prop({ required: true })
   city: string;
-  @Prop()
+  @Prop({ required: true })
   state: string;
-  @Prop()
+  @Prop({ required: true })
   postalCode: string;
-  @Prop()
+  @Prop({ required: true })
   phone: string;
 }
 
-export const OrderSchema = SchemaFactory.createForClass(Order);
+export const AddressSchema = SchemaFactory.createForClass(Address);
 
-OrderSchema.set("toJSON", {
+AddressSchema.set("toJSON", {
   virtuals: true,
   transform: SchemaUtils.transform,
 });

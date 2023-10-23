@@ -9,9 +9,9 @@ import * as bcrypt from "bcryptjs";
 import { Model } from "mongoose";
 import { EnvironmentConstants } from "src/common/constants/environment.constants";
 import { PaginatedParamsDto } from "src/common/dto/paginated-query.dto";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
-import { User } from "./schemas/user.schema";
+import { CreateUserDto } from "../dto/create-user.dto";
+import { UpdateUserDto } from "../dto/update-user.dto";
+import { User } from "../schemas/user.schema";
 @Injectable()
 export class UsersService {
   constructor(
